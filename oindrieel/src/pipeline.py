@@ -1,8 +1,8 @@
 import numpy as np
 import re  # Added for smart day detection
-from src.vector_engine import PuruliaRAG
-from src.data_loader import TourismDataHandler
-from src.trip_planner import TripPlanner
+from oindrieel.src.vector_engine import PuruliaRAG
+from oindrieel.src.data_loader import TourismDataHandler
+from oindrieel.src.trip_planner import TripPlanner
 
 
 class PuruliaBrain:

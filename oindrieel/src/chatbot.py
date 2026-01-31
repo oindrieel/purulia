@@ -4,7 +4,7 @@ import sys
 # Ensure we can import from src
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.pipeline import PuruliaBrain
+from oindrieel.src.pipeline import PuruliaBrain
 
 
 def format_itinerary(itinerary):

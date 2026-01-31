@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from src.pipeline import PuruliaBrain
+from oindrieel.src.pipeline import PuruliaBrain
 
 # 1. Initialize the App
 # We initialize the Brain OUTSIDE the endpoint so it loads the model only once at startup.

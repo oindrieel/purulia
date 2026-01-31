@@ -2,7 +2,7 @@ import faiss
 import numpy as np
 import os
 from sentence_transformers import SentenceTransformer
-from src.data_loader import TourismDataHandler
+from oindrieel.src.data_loader import TourismDataHandler
 
 
 class PuruliaRAG:
