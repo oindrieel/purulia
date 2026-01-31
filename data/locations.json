@@ -1,0 +1,62 @@
+[
+    {
+        "id": "loc_001",
+        "name": "Ayodhya Hills",
+        "category": "Nature",
+        "tags": ["Trekking", "Adventure", "Scenic", "Waterfall", "Photography"],
+        "description": "Ajodhya Hills is a small plateau with hilly surroundings located in the Purulia district. It is part of the Dalma Mountain range and an extended part of the Eastern Ghats. Popular for rock climbing and freshwater springs.",
+        "location_data": {
+            "latitude": 23.2867,
+            "longitude": 86.1156,
+            "zone": "South-West"
+        }
+    },
+    {
+        "id": "loc_002",
+        "name": "Charida Village",
+        "category": "Culture",
+        "tags": ["Art", "History", "Culture", "Handicrafts", "Shopping"],
+        "description": "Known as the 'Village of Masks' (Mukhosh Gram), Charida is the hub of the Chhau dance tradition. Over 150 families here are involved in making the vibrant, oversized masks used in the martial dance form.",
+        "location_data": {
+            "latitude": 23.2200,
+            "longitude": 86.0800,
+            "zone": "South-West"
+        }
+    },
+    {
+        "id": "loc_003",
+        "name": "Garh Panchakot",
+        "category": "History",
+        "tags": ["Ruins", "Architecture", "History", "Fort", "Photography"],
+        "description": "A ruined fort at the foothills of Panchet Hill. It stands as a testimony to the Bargi attack during the 18th century. The site contains terracotta temples in the Bishnupur style.",
+        "location_data": {
+            "latitude": 23.6167,
+            "longitude": 86.7667,
+            "zone": "North-East"
+        }
+    },
+    {
+        "id": "loc_004",
+        "name": "Pakbirra Jain Temples",
+        "category": "Heritage",
+        "tags": ["Religious", "Archaeology", "History", "Sculpture"],
+        "description": "An open-air museum of ancient Jain sculptures dating back to the 9th century. The site features three stone temples and a colossal 7.5-foot statue of a Tirthankara.",
+        "location_data": {
+            "latitude": 23.1667,
+            "longitude": 86.6667,
+            "zone": "South-East"
+        }
+    },
+    {
+        "id": "loc_005",
+        "name": "Bamni Falls",
+        "category": "Nature",
+        "tags": ["Waterfall", "Trekking", "Adventure", "Nature"],
+        "description": "A perennial waterfall located near Ayodhya Hills. Reaching the falls requires a trek down through a dense forest path, making it popular for adventure seekers.",
+        "location_data": {
+            "latitude": 23.2333,
+            "longitude": 86.0833,
+            "zone": "South-West"
+        }
+    }
+]
