@@ -1,7 +1,9 @@
 import numpy as np
+import re  # Added for smart day detection
 from src.vector_engine import PuruliaRAG
 from src.data_loader import TourismDataHandler
 from src.trip_planner import TripPlanner
+
 
 class PuruliaBrain:
     def __init__(self):
@@ -9,35 +11,60 @@ class PuruliaBrain:
         self.rag = PuruliaRAG()
         self.data = TourismDataHandler()
 
-        # 2. Define your "Intents" (The categories the AI understands)
+        # 2. Define your "Intents"
         self.intents = {
             "history_culture": "Tell me about history, culture, stories, or details of a place.",
             "recommendation": "Suggest places to visit, things to do, or attractions based on interest.",
             "trip_planner": "Plan a trip, itinerary, schedule, or route for multiple days."
         }
 
-        # 3. Pre-calculate Intent Vectors (Optimization)
-        # We use the existing model to understand what these intents mean
+        # 3. Pre-calculate Intent Vectors
         print("🧠 Calibrating Intent Models...")
         self.intent_names = list(self.intents.keys())
         self.intent_vectors = self.rag.model.encode(list(self.intents.values()))
 
     def classify_intent(self, user_query):
-        """
-        Decides what the user wants by comparing their query to the Intent definitions.
-        """
-        # Vectorize user query
+        """Decides what the user wants."""
         query_vec = self.rag.model.encode([user_query])
-
-        # Calculate similarity (Dot Product)
         scores = np.dot(query_vec, self.intent_vectors.T)[0]
-
-        # Get the highest score
         best_idx = np.argmax(scores)
         best_intent = self.intent_names[best_idx]
         confidence = scores[best_idx]
-
         return best_intent, confidence
+
+    def extract_days(self, text):
+        """Finds '3 days', '2 day', '5-day' in text using Regex."""
+        # Matches digits followed by 'day' (e.g., "3 days", "2-day")
+        match = re.search(r'(\d+)\s*-?\s*day', text.lower())
+        if match:
+            return int(match.group(1))
+        return 1  # Default
+
+    def extract_interests(self, text):
+        """Scans text for keywords to build an interest list."""
+        text = text.lower()
+        interests = []
+
+        # Mapping keywords to Category Tags
+        keywords = {
+            "history": "History", "historical": "History", "ancient": "History", "ruins": "History",
+            "nature": "Nature", "scenic": "Nature", "waterfall": "Nature", "hill": "Nature",
+            "culture": "Culture", "mask": "Culture", "dance": "Culture", "art": "Culture",
+            "adventure": "Adventure", "trek": "Adventure", "hiking": "Adventure",
+            "photography": "Nature", "photo": "Nature", "camera": "Nature",  # Added Photography
+            "relax": "Nature", "chill": "Nature"  # Added Relax
+        }
+
+        for word, tag in keywords.items():
+            if word in text:
+                if tag not in interests:
+                    interests.append(tag)
+
+        # Default if nothing found
+        if not interests:
+            interests = ["Nature", "History"]
+
+        return interests
 
     def process_query(self, user_text):
         print(f"\n📝 Input: '{user_text}'")
@@ -50,7 +77,6 @@ class PuruliaBrain:
 
         # Step B: Route to the right tool
         if intent == "history_culture":
-            # Call RAG
             print("   -> Routing to RAG Engine...")
             results = self.rag.search(user_text, top_k=1)
             if results:
@@ -64,67 +90,43 @@ class PuruliaBrain:
                 response = {"error": "No relevant history found."}
 
         elif intent == "recommendation":
-            # Call Tag Filter (Simple Logic for now)
             print("   -> Routing to Recommendation Engine...")
-            # Extract basic keywords manually for this week (We will upgrade this later)
+            interests = self.extract_interests(user_text)
+
+            # Combine results for all detected interests
             found_places = []
-            if "adventure" in user_text.lower():
-                found_places = self.data.filter_by_tag("Adventure")
-            elif "history" in user_text.lower():
-                found_places = self.data.filter_by_tag("History")
-            else:
-                found_places = ["Ayodhya Hills", "Charida Village"]  # Default
+            for interest in interests:
+                found_places.extend(self.data.filter_by_tag(interest))
+
+            # Deduplicate
+            found_places = list(set(found_places))
 
             response = {
                 "type": "recommendation",
                 "places": found_places
             }
 
-
         elif intent == "trip_planner":
-
             print("   -> Routing to Trip Planner...")
-
-            # 1. Initialize Planner with raw data
 
             planner = TripPlanner(self.data.get_all_locations())
 
-            # 2. Extract constraints (Basic logic for now)
+            # Use smarter extraction logic
+            days = self.extract_days(user_text)
+            interests = self.extract_interests(user_text)
 
-            # Default to 2 days if not specified
-
-            days = 2 if "2 day" in user_text or "two day" in user_text else 1
-
-            # Default interests if none detected
-
-            interests = ["nature", "history"]
-
-            if "adventure" in user_text: interests = ["adventure"]
-
-            # 3. Generate Plan
+            print(f"      (Extracted: {days} days, Interests: {interests})")
 
             itinerary = planner.plan_trip(days=days, interests=interests)
 
             response = {
-
                 "type": "plan",
-
                 "itinerary": itinerary
-
             }
 
         return response
 
 
-# --- Test Block ---
 if __name__ == "__main__":
     brain = PuruliaBrain()
-
-    # Test 1: History Request
-    brain.process_query("What is the story behind the masks?")
-
-    # Test 2: Recommendation Request
-    brain.process_query("I like adventure and trekking.")
-
-    # Test 3: Planning Request
-    brain.process_query("Make a 2 day plan for me.")
+    brain.process_query("Plan a 3 day trip for scenic places")
