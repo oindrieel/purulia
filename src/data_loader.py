@@ -46,14 +46,12 @@ class TourismDataHandler:
         return corpus
 
 
-# --- Quick Test Block ---
 if __name__ == "__main__":
     handler = TourismDataHandler()
 
     print("--- Testing Tag Filter (User likes 'Adventure') ---")
     recommendations = handler.filter_by_tag("Adventure")
     print(recommendations)
-    # Expected Output: ['Ayodhya Hills', 'Bamni Falls']
 
     print("\n--- Testing RAG Corpus Generation ---")
     print(handler.get_text_corpus()[0])
