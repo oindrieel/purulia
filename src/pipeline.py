@@ -1,7 +1,7 @@
 import numpy as np
 from src.vector_engine import PuruliaRAG
 from src.data_loader import TourismDataHandler
-
+from src.trip_planner import TripPlanner
 
 class PuruliaBrain:
     def __init__(self):
@@ -80,9 +80,38 @@ class PuruliaBrain:
                 "places": found_places
             }
 
+
         elif intent == "trip_planner":
-            print("   -> Routing to Trip Planner (Coming Soon)...")
-            response = {"type": "plan", "msg": "Trip Planner module is under construction."}
+
+            print("   -> Routing to Trip Planner...")
+
+            # 1. Initialize Planner with raw data
+
+            planner = TripPlanner(self.data.get_all_locations())
+
+            # 2. Extract constraints (Basic logic for now)
+
+            # Default to 2 days if not specified
+
+            days = 2 if "2 day" in user_text or "two day" in user_text else 1
+
+            # Default interests if none detected
+
+            interests = ["nature", "history"]
+
+            if "adventure" in user_text: interests = ["adventure"]
+
+            # 3. Generate Plan
+
+            itinerary = planner.plan_trip(days=days, interests=interests)
+
+            response = {
+
+                "type": "plan",
+
+                "itinerary": itinerary
+
+            }
 
         return response
 
