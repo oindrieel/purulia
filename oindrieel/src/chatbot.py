@@ -1,7 +1,6 @@
 import os
 import sys
 
-# Ensure we can import from src
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from oindrieel.src.pipeline import PuruliaBrain
@@ -41,10 +40,8 @@ def start_chat():
             if not user_input:
                 continue
 
-            # Pass to the Brain
             response = brain.process_query(user_input)
 
-            # Format the output based on response type
             print("🤖 Bot:", end=" ")
 
             if response.get("type") == "info":

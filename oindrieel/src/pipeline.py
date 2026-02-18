@@ -7,18 +7,15 @@ from oindrieel.src.trip_planner import TripPlanner
 
 class PuruliaBrain:
     def __init__(self):
-        # 1. Initialize your RAG engine (which holds the AI model)
         self.rag = PuruliaRAG()
         self.data = TourismDataHandler()
 
-        # 2. Define your "Intents"
         self.intents = {
             "history_culture": "Tell me about history, culture, stories, or details of a place.",
             "recommendation": "Suggest places to visit, things to do, or attractions based on interest.",
             "trip_planner": "Plan a trip, itinerary, schedule, or route for multiple days."
         }
 
-        # 3. Pre-calculate Intent Vectors
         print("🧠 Calibrating Intent Models...")
         self.intent_names = list(self.intents.keys())
         self.intent_vectors = self.rag.model.encode(list(self.intents.values()))
@@ -34,7 +31,6 @@ class PuruliaBrain:
 
     def extract_days(self, text):
         """Finds '3 days', '2 day', '5-day' in text using Regex."""
-        # Matches digits followed by 'day' (e.g., "3 days", "2-day")
         match = re.search(r'(\d+)\s*-?\s*day', text.lower())
         if match:
             return int(match.group(1))
@@ -44,15 +40,13 @@ class PuruliaBrain:
         """Scans text for keywords to build an interest list."""
         text = text.lower()
         interests = []
-
-        # Mapping keywords to Category Tags
         keywords = {
             "history": "History", "historical": "History", "ancient": "History", "ruins": "History",
             "nature": "Nature", "scenic": "Nature", "waterfall": "Nature", "hill": "Nature",
             "culture": "Culture", "mask": "Culture", "dance": "Culture", "art": "Culture",
             "adventure": "Adventure", "trek": "Adventure", "hiking": "Adventure",
-            "photography": "Nature", "photo": "Nature", "camera": "Nature",  # Added Photography
-            "relax": "Nature", "chill": "Nature"  # Added Relax
+            "photography": "Nature", "photo": "Nature", "camera": "Nature",
+            "relax": "Nature", "chill": "Nature"
         }
 
         for word, tag in keywords.items():
@@ -60,7 +54,6 @@ class PuruliaBrain:
                 if tag not in interests:
                     interests.append(tag)
 
-        # Default if nothing found
         if not interests:
             interests = ["Nature", "History"]
 
@@ -69,13 +62,11 @@ class PuruliaBrain:
     def process_query(self, user_text):
         print(f"\n📝 Input: '{user_text}'")
 
-        # Step A: Classify
         intent, conf = self.classify_intent(user_text)
         print(f"🤔 Detected Intent: {intent.upper()} (Confidence: {conf:.2f})")
 
         response = {}
 
-        # Step B: Route to the right tool
         if intent == "history_culture":
             print("   -> Routing to RAG Engine...")
             results = self.rag.search(user_text, top_k=1)
@@ -93,12 +84,10 @@ class PuruliaBrain:
             print("   -> Routing to Recommendation Engine...")
             interests = self.extract_interests(user_text)
 
-            # Combine results for all detected interests
             found_places = []
             for interest in interests:
                 found_places.extend(self.data.filter_by_tag(interest))
 
-            # Deduplicate
             found_places = list(set(found_places))
 
             response = {
@@ -111,7 +100,6 @@ class PuruliaBrain:
 
             planner = TripPlanner(self.data.get_all_locations())
 
-            # Use smarter extraction logic
             days = self.extract_days(user_text)
             interests = self.extract_interests(user_text)
 

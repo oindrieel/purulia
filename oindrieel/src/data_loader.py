@@ -29,7 +29,6 @@ class TourismDataHandler:
         """
         results = []
         for place in self.data:
-            # Case-insensitive check
             if tag.lower() in [t.lower() for t in place['tags']]:
                 results.append(place['name'])
         return results

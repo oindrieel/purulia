@@ -7,21 +7,17 @@ from oindrieel.src.data_loader import TourismDataHandler
 
 class PuruliaRAG:
     def __init__(self):
-        # 1. Define the specific folder for models
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         model_path = os.path.join(base_dir, "models")
 
         print(f"⏳ Loading AI Model into '{model_path}'...")
 
-        # 2. Load model with 'cache_folder' pointing to your directory
         self.model = SentenceTransformer('all-MiniLM-L6-v2', cache_folder=model_path)
 
-        # Connect to your Data Loader
         self.data_handler = TourismDataHandler()
         self.corpus = self.data_handler.get_text_corpus()
         self.raw_data = self.data_handler.get_all_locations()
 
-        # Internal storage for the vector index
         self.index = None
         self._build_index()
 
