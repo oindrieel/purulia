@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purulia AI Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-green-700 text-white p-4 shadow-md flex items-center justify-between z-10">
+        <h1 class="text-xl font-bold"><i class="fa-solid fa-map-location-dot mr-2"></i>Purulia Heritage AI</h1>
+        <span class="text-sm bg-green-800 px-3 py-1 rounded-full shadow-inner"><i class="fa-solid fa-microchip mr-1"></i> Multimodal System</span>
+    </header>
+
+    <!-- Chat Container -->
+    <div id="chat-box" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 scroll-smooth">
+        <!-- Bot Welcome Message -->
+        <div class="flex items-start gap-3">
+            <div class="bg-green-600 text-white p-2 rounded-full h-10 w-10 flex items-center justify-center shrink-0 shadow-sm">
+                <i class="fa-solid fa-robot"></i>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm max-w-[95%] lg:max-w-[85%] border border-gray-100">
+                <p class="text-gray-800">Welcome to Purulia! You can type a question, ask for a trip plan, or upload an image to identify a location.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Preview Area -->
+    <div id="image-preview-container" class="hidden px-4 py-3 bg-gray-200 border-t border-gray-300 flex items-center gap-3">
+        <span class="text-sm font-semibold text-gray-700"><i class="fa-solid fa-paperclip mr-1"></i> Attached:</span>
+        <img id="image-preview" src="" class="h-14 w-14 object-cover rounded shadow-sm border border-white">
+        <button onclick="clearImage()" class="text-red-500 text-sm hover:text-red-700 transition font-medium"><i class="fa-solid fa-xmark mr-1"></i>Remove</button>
+    </div>
+
+    <!-- Input Area -->
+    <div class="bg-white p-4 border-t shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] flex items-center gap-3">
+        <label for="image-upload" class="cursor-pointer text-gray-400 hover:text-green-600 transition p-2 bg-gray-50 rounded-full hover:bg-green-50">
+            <i class="fa-solid fa-camera text-xl"></i>
+        </label>
+        <input type="file" id="image-upload" accept="image/*" class="hidden" onchange="previewImage(event)">
+
+        <input type="text" id="user-input" placeholder="Ask about Purulia or plan a trip..."
+               class="flex-1 bg-gray-50 border border-gray-200 rounded-full px-5 py-3 focus:outline-none focus:border-green-500 focus:bg-white transition text-gray-800">
+
+        <button onclick="sendMessage()" class="bg-green-600 text-white h-12 w-12 rounded-full hover:bg-green-700 transition shadow-md flex items-center justify-center">
+            <i class="fa-solid fa-paper-plane"></i>
+        </button>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const fileInput = document.getElementById('image-upload');
+        let selectedFile = null;
+
+        function previewImage(event) {
+            selectedFile = event.target.files[0];
+            if (selectedFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('image-preview').src = e.target.result;
+                    document.getElementById('image-preview-container').classList.remove('hidden');
+                }
+                reader.readAsDataURL(selectedFile);
+            }
+        }
+
+        function clearImage() {
+            selectedFile = null;
+            fileInput.value = "";
+            document.getElementById('image-preview-container').classList.add('hidden');
+        }
+
+        // UPGRADED: CSS Grid layout for Itinerary Cards
+        function formatItineraryHTML(itinerary) {
+            let html = '<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-4 w-full">';
+
+            for (const [day, details] of Object.entries(itinerary)) {
+                html += `
+                    <div class="bg-gradient-to-br from-green-50 to-white border border-green-200 rounded-xl p-5 shadow-sm hover:shadow-md transition">
+                        <div class="border-b border-green-100 pb-3 mb-3">
+                            <h4 class="font-bold text-green-800 text-lg flex items-center justify-between">
+                                ${day}
+                                <span class="text-xs font-semibold bg-green-100 text-green-700 px-2 py-1 rounded-full"><i class="fa-solid fa-map-pin mr-1"></i>${details.Zone}</span>
+                            </h4>
+                        </div>
+                        <ul class="text-sm space-y-4 text-gray-700">
+                            <li class="flex items-start gap-3">
+                                <div class="bg-orange-100 text-orange-500 p-2 rounded-lg text-lg leading-none shrink-0">🌅</div>
+                                <div><span class="font-bold text-gray-900 block text-xs uppercase tracking-wider mb-0.5">Morning</span> ${details.Morning}</div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <div class="bg-yellow-100 text-yellow-600 p-2 rounded-lg text-lg leading-none shrink-0">☀️</div>
+                                <div><span class="font-bold text-gray-900 block text-xs uppercase tracking-wider mb-0.5">Afternoon</span> ${details.Afternoon}</div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <div class="bg-indigo-100 text-indigo-500 p-2 rounded-lg text-lg leading-none shrink-0">🌙</div>
+                                <div><span class="font-bold text-gray-900 block text-xs uppercase tracking-wider mb-0.5">Evening</span> ${details.Evening}</div>
+                            </li>
+                        </ul>
+                    </div>
+                `;
+            }
+            html += '</div>';
+            return html;
+        }
+
+        // UPGRADED: Bot width expanded (max-w-[95%] lg:max-w-[85%])
+        function appendMessage(sender, text, isImage = false, imgSrc = "") {
+            const isBot = sender === 'bot';
+            const align = isBot ? 'flex-row' : 'flex-row-reverse';
+            const bgColor = isBot ? 'bg-white' : 'bg-green-100';
+            const icon = isBot ? '<i class="fa-solid fa-robot"></i>' : '<i class="fa-solid fa-user"></i>';
+            const iconBg = isBot ? 'bg-green-600' : 'bg-blue-600';
+            const maxWidth = isBot ? 'max-w-[95%] lg:max-w-[85%] w-full' : 'max-w-[85%] md:max-w-[70%]'; // The Fix!
+
+            let contentHTML = `<div class="whitespace-pre-wrap text-gray-800 leading-relaxed overflow-x-auto">${text}</div>`;
+            if (isImage) {
+                contentHTML = `<img src="${imgSrc}" class="w-64 max-w-full rounded-lg mb-3 shadow border border-gray-200">` + contentHTML;
+            }
+
+            const html = `
+                <div class="flex items-start gap-3 ${align}">
+                    <div class="${iconBg} text-white p-2 rounded-full h-10 w-10 flex items-center justify-center shrink-0 shadow-sm mt-1">
+                        ${icon}
+                    </div>
+                    <div class="${bgColor} p-4 rounded-2xl shadow-sm ${maxWidth} border ${isBot ? 'border-gray-200' : 'border-green-300'}">
+                        ${contentHTML}
+                    </div>
+                </div>
+            `;
+            chatBox.insertAdjacentHTML('beforeend', html);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const textInput = document.getElementById('user-input').value;
+            if (!textInput && !selectedFile) return;
+
+            let imgSrc = selectedFile ? URL.createObjectURL(selectedFile) : "";
+            appendMessage('user', textInput, !!selectedFile, imgSrc);
+            document.getElementById('user-input').value = "";
+
+            appendMessage('bot', '<div class="flex items-center text-green-600 font-medium"><i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Analyzing Purulia Data...</div>');
+            const loadingMsg = chatBox.lastElementChild;
+
+            try {
+                if (selectedFile) {
+                    const formData = new FormData();
+                    formData.append("image", selectedFile);
+                    if (textInput) formData.append("text", textInput);
+
+                    const response = await fetch('/api/multimodal', { method: 'POST', body: formData });
+                    const data = await response.json();
+
+                    let reply = data.ai_message || "";
+                    if (data.places && data.places.length > 0) {
+                        // UPGRADED: Horizontal tags instead of bullet points
+                        reply += "<div class='mt-3'><strong><i class='fa-solid fa-map-location text-green-600 mr-1'></i> Places related to this:</strong><div class='flex flex-wrap gap-2 mt-2'>";
+                        data.places.forEach(p => reply += `<span class='bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm border border-green-200 shadow-sm'>${p}</span>`);
+                        reply += "</div></div>";
+                    }
+                    loadingMsg.outerHTML = "";
+                    appendMessage('bot', reply || "I processed the image!");
+                    clearImage();
+                }
+                else {
+                    const response = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ text: textInput })
+                    });
+                    const data = await response.json();
+
+                    let reply = "";
+                    if (data.type === 'info') reply = `<strong class="text-lg text-green-800"><i class="fa-solid fa-book-open mr-2"></i>${data.subject}</strong><div class='mt-2 text-gray-700 p-3 bg-gray-50 rounded border border-gray-100'>${data.text}</div>`;
+                    else if (data.type === 'plan') reply = "<strong class='text-lg text-green-800'><i class='fa-solid fa-calendar-days mr-2'></i>Here is your customized trip plan:</strong>" + formatItineraryHTML(data.itinerary);
+                    else if (data.type === 'recommendation') {
+                        // UPGRADED: Horizontal tags instead of bullet points
+                        reply = "<strong><i class='fa-solid fa-thumbs-up text-green-600 mr-1'></i> I recommend checking out:</strong><div class='flex flex-wrap gap-2 mt-2'>";
+                        data.places.forEach(p => reply += `<span class='bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm border border-green-200 shadow-sm'>${p}</span>`);
+                        reply += "</div>";
+                    }
+                    else reply = data.error || "I didn't understand that.";
+
+                    loadingMsg.outerHTML = "";
+                    appendMessage('bot', reply);
+                }
+            } catch (err) {
+                loadingMsg.outerHTML = "";
+                appendMessage('bot', '<span class="text-red-500"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Connection error. Make sure the backend is running.</span>');
+                console.error(err);
+            }
+        }
+
+        document.getElementById('user-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>

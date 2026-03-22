@@ -3,46 +3,50 @@ from collections import defaultdict
 
 class TripPlanner:
     def __init__(self, all_locations):
-        """
-        :param all_locations: List of dicts (the raw data from locations.json)
-        """
         self.locations = all_locations
 
-    def plan_trip(self, days=1, interests=None):
-        if interests is None:
-            interests = []
+    def plan_trip(self, days=1, interests=None, specific_places=None):
+        if interests is None: interests = []
+        if specific_places is None: specific_places = []
 
-        print(f"🗺️ Planning a {days}-day trip for interests: {interests}...")
+        print(f"🗺️ Planning a {days}-day trip...")
 
+        # 1. Score locations
         scored_places = []
         for place in self.locations:
-            score = 0
-            score += 1
+            score = 1  # Base score
 
+            # Bonus score for interest match
             place_tags = [t.lower() for t in place.get('tags', [])]
             for interest in interests:
                 if interest.lower() in place_tags:
                     score += 5
+
+                    # CONTEXT MEMORY OVERRIDE: If this place was in the context, boost it massively!
+            if specific_places and place['name'] in specific_places:
+                score += 100
 
             scored_places.append({
                 "data": place,
                 "score": score
             })
 
+        # 2. Sort by score
         scored_places.sort(key=lambda x: x['score'], reverse=True)
 
+        # 3. Group by Zone
         zones = defaultdict(list)
         for item in scored_places:
             zone_name = item['data']['location_data']['zone']
             zones[zone_name].append(item['data'])
 
+        # 4. Allocate Zones to Days
         itinerary = {}
         sorted_zones = sorted(zones.keys(), key=lambda z: len(zones[z]), reverse=True)
 
         current_day = 1
         for zone in sorted_zones:
-            if current_day > days:
-                break
+            if current_day > days: break
 
             days_places = zones[zone][:3]
 
@@ -55,42 +59,3 @@ class TripPlanner:
             current_day += 1
 
         return itinerary
-
-
-if __name__ == "__main__":
-    mock_locations = [
-        {
-            "name": "Ayodhya Hills",
-            "tags": ["Nature", "Adventure"],
-            "location_data": {"zone": "South-West"}
-        },
-        {
-            "name": "Bamni Falls",
-            "tags": ["Nature", "Waterfall"],
-            "location_data": {"zone": "South-West"}
-        },
-        {
-            "name": "Charida Village",
-            "tags": ["Culture", "Art"],
-            "location_data": {"zone": "South-West"}
-        },
-        {
-            "name": "Garh Panchakot",
-            "tags": ["History", "Ruins"],
-            "location_data": {"zone": "North-East"}
-        },
-        {
-            "name": "Joychandi Pahar",
-            "tags": ["Adventure", "Hiking"],
-            "location_data": {"zone": "North-East"}
-        }
-    ]
-
-    print("--- 🧪 Testing Trip Planner Module Independently ---")
-    planner = TripPlanner(mock_locations)
-
-    plan = planner.plan_trip(days=2, interests=["Nature", "History"])
-
-    import json
-
-    print(json.dumps(plan, indent=2))

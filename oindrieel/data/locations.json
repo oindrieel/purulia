@@ -1,22 +1,11 @@
 [
     {
         "id": "loc_001",
-        "name": "Ayodhya Hills",
-        "category": "Nature",
-        "tags": ["Trekking", "Adventure", "Scenic", "Waterfall", "Photography"],
-        "description": "Ajodhya Hills is a small plateau with hilly surroundings located in the Purulia district. It is part of the Dalma Mountain range and an extended part of the Eastern Ghats. Popular for rock climbing and freshwater springs.",
-        "location_data": {
-            "latitude": 23.2867,
-            "longitude": 86.1156,
-            "zone": "South-West"
-        }
-    },
-    {
-        "id": "loc_002",
         "name": "Charida Village",
         "category": "Culture",
-        "tags": ["Art", "History", "Culture", "Handicrafts", "Shopping"],
-        "description": "Known as the 'Village of Masks' (Mukhosh Gram), Charida is the hub of the Chhau dance tradition. Over 150 families here are involved in making the vibrant, oversized masks used in the martial dance form.",
+        "cv_class": "purulia_culture",
+        "tags": ["Culture", "Art", "Handicrafts", "Photography", "Shopping"],
+        "description": "Known as the 'Village of Masks' (Mukhosh Gram). Over 150 families here are involved in making the vibrant, oversized masks used in the famous Chhau martial dance. A vibrant display of Manbhum heritage.",
         "location_data": {
             "latitude": 23.2200,
             "longitude": 86.0800,
@@ -24,23 +13,116 @@
         }
     },
     {
-        "id": "loc_003",
-        "name": "Garh Panchakot",
-        "category": "History",
-        "tags": ["Ruins", "Architecture", "History", "Fort", "Photography"],
-        "description": "A ruined fort at the foothills of Panchet Hill. It stands as a testimony to the Bargi attack during the 18th century. The site contains terracotta temples in the Bishnupur style.",
+        "id": "loc_002",
+        "name": "Nimdih Gandhi Ashram",
+        "category": "Culture",
+        "cv_class": "purulia_culture",
+        "tags": ["Culture", "History", "Village", "Relax"],
+        "description": "A cultural hub preserving the local traditions of Purulia. It promotes local Santhal and Kurmi culture, traditional Jhumur music, and tribal handicrafts.",
         "location_data": {
-            "latitude": 23.6167,
-            "longitude": 86.7667,
-            "zone": "North-East"
+            "latitude": 23.0012,
+            "longitude": 86.1234,
+            "zone": "South-West"
+        }
+    },
+    {
+        "id": "loc_003",
+        "name": "Ayodhya Hills",
+        "category": "Hills",
+        "cv_class": "purulia_hills",
+        "tags": ["Nature", "Adventure", "Trekking", "Scenic", "Photography"],
+        "description": "A picturesque plateau forming an extended part of the Eastern Ghats. Rich in mythology (believed to be a resting place of Lord Rama) and highly popular for rock climbing and dense forest trails.",
+        "location_data": {
+            "latitude": 23.2867,
+            "longitude": 86.1156,
+            "zone": "South-West"
         }
     },
     {
         "id": "loc_004",
+        "name": "Joychandi Pahar",
+        "category": "Hills",
+        "cv_class": "purulia_hills",
+        "tags": ["Adventure", "Hiking", "Photography", "Nature"],
+        "description": "A prominent hill known for rock climbing and its rugged beauty. It gained massive cultural significance as the shooting location for Satyajit Ray's iconic film 'Hirak Rajar Deshe'.",
+        "location_data": {
+            "latitude": 23.5417,
+            "longitude": 86.6667,
+            "zone": "North-East"
+        }
+    },
+    {
+        "id": "loc_005",
+        "name": "Matha Buru",
+        "category": "Hills",
+        "cv_class": "purulia_hills",
+        "tags": ["Adventure", "Trekking", "Camping", "Nature"],
+        "description": "Known for the annual 'Matha Buru Mela' (tribal fair) held in winter. The hill offers excellent camping grounds and is a basecamp for rock climbing training.",
+        "location_data": {
+            "latitude": 23.1890,
+            "longitude": 86.0450,
+            "zone": "South-West"
+        }
+    },
+    {
+        "id": "loc_006",
+        "name": "Bamni Falls",
+        "category": "Nature",
+        "cv_class": "purulia_nature",
+        "tags": ["Nature", "Waterfall", "Trekking", "Adventure"],
+        "description": "A stunning perennial waterfall cascading down the Ayodhya Hills. The trek down to the bottom of the falls is surrounded by dense, lush green forests.",
+        "location_data": {
+            "latitude": 23.2333,
+            "longitude": 86.0833,
+            "zone": "South-West"
+        }
+    },
+    {
+        "id": "loc_007",
+        "name": "Baranti Lake (Muradi)",
+        "category": "Nature",
+        "cv_class": "purulia_nature",
+        "tags": ["Nature", "Relax", "Photography", "Scenic", "Wildlife"],
+        "description": "A quiet, scenic village beside a beautiful irrigation project dam. Surrounded by the Panchkot and Biharinath hills, it is famous for its mesmerizing sunsets and migratory birds.",
+        "location_data": {
+            "latitude": 23.5833,
+            "longitude": 86.8500,
+            "zone": "North-East"
+        }
+    },
+    {
+        "id": "loc_008",
+        "name": "Khairabera Dam",
+        "category": "Nature",
+        "cv_class": "purulia_nature",
+        "tags": ["Nature", "Relax", "Scenic", "Camping"],
+        "description": "An eco-tourism hotspot featuring a large reservoir flanked by hills and forests. It is highly popular for luxury tent camping and kayaking in the serene waters.",
+        "location_data": {
+            "latitude": 23.2450,
+            "longitude": 86.0120,
+            "zone": "South-West"
+        }
+    },
+    {
+        "id": "loc_009",
+        "name": "Marble Lake (Blue Water)",
+        "category": "Nature",
+        "cv_class": "purulia_nature",
+        "tags": ["Nature", "Photography", "Scenic"],
+        "description": "An abandoned stone quarry that has filled with water, reflecting a stunning azure blue color against the rugged canyon-like stone walls. A highly photogenic hidden gem.",
+        "location_data": {
+            "latitude": 23.2670,
+            "longitude": 86.1340,
+            "zone": "South-West"
+        }
+    },
+    {
+        "id": "loc_010",
         "name": "Pakbirra Jain Temples",
-        "category": "Heritage",
-        "tags": ["Religious", "Archaeology", "History", "Sculpture"],
-        "description": "An open-air museum of ancient Jain sculptures dating back to the 9th century. The site features three stone temples and a colossal 7.5-foot statue of a Tirthankara.",
+        "category": "Temple",
+        "cv_class": "purulia_temple",
+        "tags": ["History", "Architecture", "Religious", "Archaeology"],
+        "description": "An open-air museum of ancient Jain sculptures and temples dating back to the 9th and 10th centuries. The site features a colossal 7.5-foot stone statue of a Tirthankara.",
         "location_data": {
             "latitude": 23.1667,
             "longitude": 86.6667,
@@ -48,15 +130,29 @@
         }
     },
     {
-        "id": "loc_005",
-        "name": "Bamni Falls",
-        "category": "Nature",
-        "tags": ["Waterfall", "Trekking", "Adventure", "Nature"],
-        "description": "A perennial waterfall located near Ayodhya Hills. Reaching the falls requires a trek down through a dense forest path, making it popular for adventure seekers.",
+        "id": "loc_011",
+        "name": "Garh Panchakot",
+        "category": "Temple",
+        "cv_class": "purulia_temple",
+        "tags": ["History", "Ruins", "Architecture", "Photography", "Nature"],
+        "description": "The ruined fort of the Singh Deo dynasty at the foothills of Panchet. Destroyed during the Maratha (Bargi) attacks in the 18th century, it features remnants of beautiful terracotta temples.",
         "location_data": {
-            "latitude": 23.2333,
-            "longitude": 86.0833,
-            "zone": "South-West"
+            "latitude": 23.6167,
+            "longitude": 86.7667,
+            "zone": "North-East"
+        }
+    },
+    {
+        "id": "loc_012",
+        "name": "Deulghata Temples",
+        "category": "Temple",
+        "cv_class": "purulia_temple",
+        "tags": ["History", "Architecture", "Religious", "Ruins"],
+        "description": "Located near the Kansabati River, Deulghata features the ruins of 11th-century tall brick temples with intricate stucco decoration. It was an important center of Jainism and Hinduism.",
+        "location_data": {
+            "latitude": 23.3833,
+            "longitude": 86.1500,
+            "zone": "Central"
         }
     }
 ]
